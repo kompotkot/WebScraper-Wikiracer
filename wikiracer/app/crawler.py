@@ -40,7 +40,9 @@ async def fetch(session: aiohttp.client.ClientSession, url: str, dct) -> set:
         # Get all href from response
         # url_list = re.findall('href="(.[^"]+)"', html)
         soup = bf(html, features="lxml")
-        url_list = [a['href'] for a in soup.find_all('a', href=True)]
+        content_div = soup.find('div', {'id': 'bodyContent'})
+        url_list = [a['href'] for a in content_div.find_all('a', href=True)]
+        
         # Clean url set from trash values
         cleared_url_set = url_cleaner(url_list, dct)
         return cleared_url_set
